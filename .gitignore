@@ -1,0 +1,31 @@
+# Compiled class file
+*.class
+
+# Log files
+*.log
+
+# Maven directories
+/target/
+
+# Eclipse, IntelliJ IDEA, and NetBeans project files
+/.idea/
+/.vscode/
+/*.iml
+/.project
+/.classpath
+/.settings/
+
+# Maven wrapper jar files
+mvnw
+mvnw.cmd
+/.mvn/
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Other temporary files
+*.swp
+*~
