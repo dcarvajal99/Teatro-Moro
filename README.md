@@ -1,25 +1,42 @@
-# Teatro Moro - Sistema de Venta de Entradas
+# 🎭 Sistema de Venta de Entradas - Teatro Moro
 
-Este proyecto es un sistema de venta de entradas para el **Teatro Moro**, donde los usuarios pueden seleccionar la zona, elegir un asiento, y obtener un descuento basado en su edad o si son estudiantes.
+Este proyecto en Java simula un sistema de venta de entradas para el Teatro Moro. Permite a los usuarios seleccionar zonas del teatro, elegir asientos, aplicar descuentos y ver promociones vigentes, todo a través de una interfaz de línea de comandos.
 
-## Descripción
+## 🧰 Funcionalidades
 
-El sistema permite realizar compras de entradas para diferentes zonas del teatro, incluyendo:
+- Selección de zona: VIP, Platea Baja, Platea Alta, Palcos.
+- Asignación de asientos según disponibilidad.
+- Aplicación de descuentos:
+  - 10% para estudiantes.
+  - 15% para adultos mayores (60+).
+  - Entrada gratuita para menores de 3 años.
+  - Promoción especial: 2 estudiantes pagan solo 1 entrada.
+- Visualización de carrito de compras.
+- Eliminación de entradas y liberación de asientos.
+- Visualización de precios y promociones actuales.
+- Resumen de entradas vendidas e ingresos generados.
 
-- Zona VIP
-- Platea Baja
-- Platea Alta
-- Palcos
+## 🏟️ Zonas del Teatro
 
-Los usuarios pueden obtener descuentos del 10% si son estudiantes y del 15% si son mayores de 60 años.
+| Zona          | Precio Base |
+|---------------|--------------|
+| VIP           | $30.000      |
+| Platea Baja   | $15.000      |
+| Platea Alta   | $18.000      |
+| Palcos        | $13.000      |
 
-## Características
+Cada zona cuenta con 10 asientos numerados del 1 al 10. Los asientos se actualizan en tiempo real a medida que se venden o liberan.
 
-- Menú principal con opciones para comprar entradas o salir.
-- Validación de asientos disponibles y gestión de reservas.
-- Cálculo de precios con descuentos aplicados según la edad y la condición de estudiante.
-- Visualización del resumen de la compra, incluyendo detalles del asiento, precio base, descuento y precio final.
+## 📦 Estructura del Proyecto
 
+- `AppTeatromoro.java`: Contiene toda la lógica del sistema, incluyendo las estructuras de datos, menú interactivo, lógica de compra y carrito.
+
+## ▶️ Cómo ejecutar
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tuusuario/teatromoro.git
+   cd teatromoro
 ## Requisitos
 
 - **Java 8 o superior**
