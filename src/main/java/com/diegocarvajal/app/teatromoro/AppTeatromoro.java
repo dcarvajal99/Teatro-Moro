@@ -2,18 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
- package com.diegocarvajal.app.teatromoro;
+package com.diegocarvajal.app.teatromoro;
 
+import java.util.ArrayList;
+import java.util.Scanner;
 
- import java.util.ArrayList;
- import java.util.Scanner;
- 
- /**
-  *
-  * @author d_car
-  */
-
-  public class AppTeatromoro {
+/**
+ *
+ * @author d_car
+ */
+public class AppTeatromoro {
 
     static ArrayList<Integer> zonaVIP = new ArrayList<>();
     static ArrayList<Integer> zonaPlateaBaja = new ArrayList<>();
@@ -23,6 +21,7 @@
 
     static int totalIngresos = 0;
     static int entradasVendidas = 0;
+    static String nombreTeatro = "Teatro Moro";
 
     static class EntradaInfo {
         String nombreZona;
@@ -37,6 +36,7 @@
             this.descripcionDescuento = descripcionDescuento;
         }
 
+        @Override
         public String toString() {
             return "Zona: " + nombreZona + " | Asientos: " + asientos + " | Total pagado: $" + precio +
                    (descripcionDescuento.isEmpty() ? "" : " | Descuentos: " + descripcionDescuento);
@@ -63,7 +63,8 @@
             System.out.println("4. Eliminar entradas del carrito");
             System.out.println("5. Ver entradas disponibles");
             System.out.println("6. Mostrar Precios de entradas");
-            System.out.println("7. Salir");
+            System.out.println("7. Emitir boleta");
+            System.out.println("8. Salir");
             System.out.print("Seleccione una opción: ");
 
             int opcion = scanner.nextInt();
@@ -75,7 +76,8 @@
                 case 4 -> eliminarEntrada(scanner);
                 case 5 -> mostrarEntradasDisponibles();
                 case 6 -> mostrarPreciosEntradas();
-                case 7 -> {
+                case 7 -> emitirBoleta();
+                case 8 -> {
                     salir = true;
                     System.out.println("Gracias por su visita al Teatro Moro.");
                 }
@@ -84,7 +86,6 @@
         }
         scanner.close();
     }
-
     static void comprarEntrada(Scanner scanner) {
         System.out.println("\n--- Zonas Disponibles ---");
         System.out.println("1. VIP: " + zonaVIP);
@@ -96,6 +97,7 @@
         do {
             System.out.print("Seleccione una zona (1-4): ");
             zonaSeleccionada = scanner.nextInt();
+
         } while (zonaSeleccionada < 1 || zonaSeleccionada > 4);
 
         String nombreZona = switch (zonaSeleccionada) {
@@ -265,5 +267,47 @@
         System.out.println("2. Platea Baja: $15.000");
         System.out.println("3. Platea Alta: $18.000");
         System.out.println("4. Palcos: $13.000");
+    }
+    static void emitirBoleta() {
+        System.out.println("\n--- Boleta de Compra ---");
+
+        if (carrito.isEmpty()) {
+            System.out.println("No hay entradas para emitir boleta.");
+            return;
+        }
+
+        for (int i = 0; i < carrito.size(); i++) {
+            EntradaInfo entrada = carrito.get(i);
+
+            System.out.println("+" + "-".repeat(50) + "+");
+            System.out.printf("| %-48s |%n", "BOLETA #" + (i + 1));
+            System.out.println("+" + "-".repeat(50) + "+");
+            System.out.printf("| %-48s |%n", "Teatro: " + nombreTeatro);
+            System.out.printf("| %-48s |%n", "Zona: " + entrada.nombreZona);
+            System.out.printf("| %-48s |%n", "Asientos: " + entrada.asientos);
+            System.out.printf("| %-48s |%n", "Total Pagado: $" + entrada.precio);
+
+            if (!entrada.descripcionDescuento.isEmpty()) {
+                String[] lineas = dividirTexto(entrada.descripcionDescuento, 48);
+                System.out.printf("| %-48s |%n", "Descuentos:");
+                for (String linea : lineas) {
+                    System.out.printf("| %-48s |%n", linea);
+                }
+            }
+
+            System.out.println("+" + "-".repeat(50) + "+\n");
+        }
+    }
+
+    static String[] dividirTexto(String texto, int longitudMaxima) {
+        ArrayList<String> lineas = new ArrayList<>();
+        while (texto.length() > longitudMaxima) {
+            int espacio = texto.lastIndexOf(' ', longitudMaxima);
+            if (espacio == -1) espacio = longitudMaxima;
+            lineas.add(texto.substring(0, espacio));
+            texto = texto.substring(espacio).trim();
+        }
+        lineas.add(texto);
+        return lineas.toArray(new String[0]);
     }
 }
