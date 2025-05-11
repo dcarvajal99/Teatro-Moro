@@ -12,7 +12,8 @@ public class AppTeatromoro {
         VIP("VIP", 30000, 1),
         PLATEA_BAJA("Platea Baja", 15000, 2),
         PLATEA_ALTA("Platea Alta", 18000, 3),
-        PALCOS("Palcos", 13000, 4);
+        PALCOS("Palcos", 13000, 4),
+        GALERIA("Galería", 10000, 5);
 
         final String nombre;
         final int precioBase;
@@ -28,7 +29,7 @@ public class AppTeatromoro {
             return Arrays.stream(values())
                     .filter(z -> z.opcionMenu == opcion)
                     .findFirst()
-                    .orElseThrow();
+                    .orElseThrow(() -> new IllegalArgumentException("Zona inválida"));
         }
     }
 
@@ -106,8 +107,8 @@ public class AppTeatromoro {
         for (Zona zona : Zona.values()) {
             System.out.printf("%d. %s%n", zona.opcionMenu, zona.nombre);
         }
-        System.out.print("Seleccione una zona (1-4): ");
-        Zona zona = Zona.fromOpcion(leerEnteroValido(scanner, 1, 4));
+        System.out.print("Seleccione una zona (1-5): ");
+        Zona zona = Zona.fromOpcion(leerEnteroValido(scanner, 1, 5));
         boolean[][] asientosZona = zonas[zona.ordinal()];
 
         mostrarMapaAsientos(zona, asientosZona, true);
@@ -142,17 +143,36 @@ public class AppTeatromoro {
                 System.out.println("Entrada inválida. Ingrese 's' o 'n'.");
             }
 
+            boolean esMujer;
+            while (true) {
+                System.out.print("Género (m/f): ");
+                String input = scanner.nextLine().toLowerCase();
+                if (input.equals("m") || input.equals("f")) {
+                    esMujer = input.equals("f");
+                    break;
+                }
+                System.out.println("Entrada inválida. Ingrese 'm' o 'f'.");
+            }
+
             int descuento = 0;
             StringBuilder detalle = new StringBuilder();
             if (edad >= 3) {
-                if (esEstudiante) {
+                if (edad < 12) {
                     descuento += (int) (zona.precioBase * 0.10);
-                    detalle.append("10% estudiante ");
+                    detalle.append("10% niño ");
+                }
+                if (esEstudiante) {
+                    descuento += (int) (zona.precioBase * 0.15);
+                    detalle.append("15% estudiante ");
                     estudiantes++;
                 }
+                if (esMujer) {
+                    descuento += (int) (zona.precioBase * 0.20);
+                    detalle.append("20% mujer ");
+                }
                 if (edad >= 60) {
-                    descuento += (int) (zona.precioBase * 0.15);
-                    detalle.append("15% adulto mayor ");
+                    descuento += (int) (zona.precioBase * 0.25);
+                    detalle.append("25% tercera edad ");
                 }
                 precioTotal += zona.precioBase - descuento;
                 if (!detalle.isEmpty()) {
@@ -194,9 +214,10 @@ public class AppTeatromoro {
             System.out.println("Leyenda: D = Disponible | X = Ocupado");
             switch (zona) {
                 case VIP -> System.out.println("       [Escenario]");
-                case PLATEA_BAJA -> System.out.println("........ (Dist Consolidaciónancia al escenario)");
+                case PLATEA_BAJA -> System.out.println("........ (Distancia al escenario)");
                 case PLATEA_ALTA -> System.out.println("........ (Distancia al escenario)\n........");
                 case PALCOS -> System.out.println("[Palcos - Lateral]");
+                case GALERIA -> System.out.println("........ (Más alejado del escenario)");
             }
         }
         System.out.println("======================");
@@ -258,10 +279,12 @@ public class AppTeatromoro {
 
     private void mostrarPromociones() {
         System.out.println("\n--- Promociones Disponibles ---");
-        System.out.println("1. 10% de descuento para estudiantes");
-        System.out.println("2. 15% de descuento para mayores de 60 años");
-        System.out.println("3. Promoción 2x1 para estudiantes");
-        System.out.println("4. Entrada gratuita para menores de 3 años");
+        System.out.println("1. 10% de descuento para niños (3 a 11 años)");
+        System.out.println("2. 20% de descuento para mujeres");
+        System.out.println("3. 15% de descuento para estudiantes");
+        System.out.println("4. 25% de descuento para tercera edad (≥60 años)");
+        System.out.println("5. Promoción 2x1 para estudiantes");
+        System.out.println("6. Entrada gratuita para menores de 3 años");
     }
 
     private void mostrarEntradasDisponibles() {
